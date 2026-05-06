@@ -112,7 +112,3 @@ Source: [UCI ML Repository](https://archive.ics.uci.edu/dataset/502/online+retai
 | Week 4 | Deployment | Docker, K8s, CI/CD, monitoring |
 
 ---
-
-**Author:** Zidio Development
-**Version:** 2.0 -- Industry Edition
-**Date:** March 2026

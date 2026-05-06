@@ -31,6 +31,10 @@ data/raw/*.csv
 data/raw/*.zip
 !data/raw/.gitkeep
 
+# Processed data (large files)
+data/processed/transactions_clean.csv
+!data/processed/.gitkeep
+
 # MLflow
 mlruns/
 mlartifacts/
