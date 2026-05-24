@@ -1,0 +1,9 @@
+Metric,Value
+EOQ,"41,106 units"
+Safety Stock (95%),"59,669 units"
+Reorder Point (95%),"162,977 units"
+Lead Time,7 days
+Fill Rate,98.4%
+Stockout Days,6
+Orders/Year,131.0
+Order Cycle,2.8 days
