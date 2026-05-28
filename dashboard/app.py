@@ -3,7 +3,6 @@
 import sys
 import os
 
-# Ensure the dashboard directory is on path so views/ is importable
 sys.path.insert(0, os.path.dirname(__file__))
 
 import streamlit as st
@@ -16,76 +15,105 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-  /* Global reset */
-  .stApp {
-    background: #F0F4F8;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  /* ── Base ── */
+  html, body, .stApp {
+    background: #EEF2F7;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #0F172A;
   }
 
-  /* Remove default top padding */
   .block-container {
-    padding-top: 1.5rem;
-    padding-bottom: 2rem;
-    max-width: 1400px;
+    padding: 1.75rem 2rem 3rem 2rem;
+    max-width: 1440px;
   }
 
-  /* Sidebar */
+  /* ── Sidebar ── */
   [data-testid="stSidebar"] {
-    background: #1E3A5F;
+    background: linear-gradient(180deg, #0F2B4C 0%, #1A3D6B 100%);
     border-right: none;
   }
-  [data-testid="stSidebar"] * {
-    color: rgba(255,255,255,0.85) !important;
+
+  /* Sidebar ALL text visible on dark background */
+  [data-testid="stSidebar"] p,
+  [data-testid="stSidebar"] span,
+  [data-testid="stSidebar"] div,
+  [data-testid="stSidebar"] label {
+    color: #CBD5E1 !important;
   }
-  [data-testid="stSidebar"] .stRadio label {
-    color: rgba(255,255,255,0.75) !important;
+
+  /* Radio buttons — clear white text */
+  [data-testid="stSidebar"] [data-testid="stRadio"] label span {
+    color: #F1F5F9 !important;
     font-size: 0.9rem !important;
-  }
-  [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-    color: rgba(255,255,255,0.5) !important;
-    font-size: 0.75rem !important;
+    font-weight: 500 !important;
   }
 
-  /* Remove Streamlit branding / footer */
-  footer { visibility: hidden; }
-  #MainMenu { visibility: hidden; }
-  header { visibility: hidden; }
-
-  /* Metric override */
-  [data-testid="stMetricValue"] {
-    font-size: 1.8rem !important;
+  /* Selected radio item */
+  [data-testid="stSidebar"] [data-testid="stRadio"] [aria-checked="true"] span {
+    color: #FFFFFF !important;
     font-weight: 700 !important;
   }
 
-  /* Divider */
-  hr { border-color: #E1E8EF; }
+  /* ── Headings in main content ── */
+  h1, h2, h3, h4 {
+    color: #0F172A !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em;
+  }
 
-  /* Table styling */
-  .stDataFrame { border-radius: 8px; overflow: hidden; }
+  /* ── Streamlit native metric ── */
+  [data-testid="stMetricValue"] {
+    font-size: 1.85rem !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+  }
+  [data-testid="stMetricLabel"] {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 
-  /* Plotly charts */
+  /* ── Divider ── */
+  hr { border-color: #CBD5E1 !important; }
+
+  /* ── Tables / DataFrames ── */
+  .stDataFrame { border-radius: 10px; overflow: hidden; }
+
+  /* ── Hide Streamlit chrome ── */
+  footer, #MainMenu, header { visibility: hidden; }
+
+  /* ── Plotly chart containers ── */
   .js-plotly-plot { border-radius: 10px; }
+
+  /* ── Slider label ── */
+  [data-testid="stSlider"] label {
+    color: #334155 !important;
+    font-weight: 600 !important;
+  }
 </style>
 """, unsafe_allow_html=True)
 
-# Sidebar branding
+# ── Sidebar branding ──────────────────────────────────────────────────────────
 st.sidebar.markdown("""
-<div style="padding: 8px 0 16px 0;">
-  <div style="font-size:1.15rem;font-weight:700;color:white;letter-spacing:0.01em;">
+<div style="padding:12px 0 18px 0;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:16px;">
+  <div style="color:#FFFFFF;font-size:1.25rem;font-weight:700;letter-spacing:-0.01em;">
     RetailPulse
   </div>
-  <div style="font-size:0.72rem;color:rgba(255,255,255,0.45);margin-top:2px;
-              text-transform:uppercase;letter-spacing:0.08em;">
+  <div style="color:#94A3B8;font-size:0.72rem;margin-top:3px;
+              text-transform:uppercase;letter-spacing:0.1em;font-weight:500;">
     Analytics Platform
   </div>
 </div>
 """, unsafe_allow_html=True)
 
-st.sidebar.markdown("---")
-st.sidebar.markdown('<div style="font-size:0.7rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Modules</div>', unsafe_allow_html=True)
+st.sidebar.markdown('<div style="color:#94A3B8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:8px;">Modules</div>', unsafe_allow_html=True)
 
 page = st.sidebar.radio(
-    label="",
+    label="Navigation",
     options=[
         "Executive Sales Summary",
         "Customer Intelligence",
@@ -96,25 +124,28 @@ page = st.sidebar.radio(
     label_visibility="collapsed",
 )
 
-st.sidebar.markdown("---")
 st.sidebar.markdown("""
-<div style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;">
-  Dataset: Online Retail II<br>
-  Source: UCI ML Repository<br>
-  Period: Dec 2009 – Dec 2011<br>
-  Records: 525,461 transactions
+<div style="margin-top:32px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.10);">
+  <div style="color:#64748B;font-size:0.7rem;line-height:1.8;">
+    <div style="color:#94A3B8;font-size:0.68rem;text-transform:uppercase;
+                letter-spacing:0.08em;font-weight:600;margin-bottom:6px;">Dataset</div>
+    Online Retail II<br>
+    <span style="color:#CBD5E1;">UCI ML Repository</span><br><br>
+    <div style="color:#94A3B8;font-size:0.68rem;text-transform:uppercase;
+                letter-spacing:0.08em;font-weight:600;margin-bottom:6px;">Coverage</div>
+    Dec 2009 – Dec 2011<br>
+    <span style="color:#CBD5E1;">525,461 transactions</span><br>
+    <span style="color:#CBD5E1;">4,312 unique customers</span>
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
+# ── Page routing ─────────────────────────────────────────────────────────────
 if page == "Executive Sales Summary":
-    from views import sales
-    sales.render()
+    from views import sales;     sales.render()
 elif page == "Customer Intelligence":
-    from views import customers
-    customers.render()
+    from views import customers; customers.render()
 elif page == "Demand Forecasting":
-    from views import forecast
-    forecast.render()
+    from views import forecast;  forecast.render()
 elif page == "Inventory Optimization":
-    from views import inventory
-    inventory.render()
+    from views import inventory; inventory.render()
