@@ -73,14 +73,14 @@ st.sidebar.markdown("---")
 st.sidebar.markdown('<span style="color:#6B7280; font-size:0.8rem;">Data synchronized up to: Dec 2011</span>', unsafe_allow_html=True)
 
 if page == "Executive Sales Summary":
-    from pages import sales
+    from views import sales
     sales.render()
 elif page == "Customer Intelligence":
-    from pages import customers
+    from views import customers
     customers.render()
 elif page == "Demand Forecasting":
-    from pages import forecast
+    from views import forecast
     forecast.render()
 elif page == "Inventory Optimization":
-    from pages import inventory
+    from views import inventory
     inventory.render()
