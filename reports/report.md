@@ -350,6 +350,81 @@ The best-performing model was selected automatically.
 
 ---
 
+### Day 9: Churn Prediction with XGBoost + SHAP
+
+**Goal:** Predict which customers are likely to churn (stop buying) using XGBoost.
+
+- **Definition of Churn:** Customers who haven't purchased in the last 90 days.
+- **Model:** Binary XGBoost classifier with class imbalance handling (`scale_pos_weight`).
+- **Explainability:** SHAP values used to explain why each customer is at risk, highlighting the most important features driving churn.
+- **Output:** `customer_churn.csv` with churn probabilities and risk labels (Low/Medium/High).
+
+---
+
+### Day 10: Inventory Optimization
+
+**Goal:** Use demand forecasts to calculate optimal inventory parameters.
+
+- **Metrics Calculated:**
+  - **Safety Stock:** Buffer stock calculated at 90%, 95%, and 99% service levels.
+  - **Reorder Point:** At what stock level to reorder based on lead time and safety stock.
+  - **Economic Order Quantity (EOQ):** The ideal order quantity that minimizes holding and ordering costs.
+- **Simulation:** Ran a historical simulation to test the inventory strategy, tracking stockout events and fill rate.
+- **Output:** `inventory_metrics.csv` and `inventory_simulation.csv`.
+
+---
+
+### Day 11: Feature Importance & Optuna Tuning
+
+**Goal:** Optimize XGBoost churn model hyperparameters using Bayesian optimization.
+
+- **Optuna Tuning:** Ran 50 trials optimizing ROC AUC using a 5-fold stratified cross-validation approach.
+- **Hyperparameters Tuned:** `max_depth`, `learning_rate`, `subsample`, `colsample_bytree`, `gamma`, and regularizations.
+- **Output:** `optuna_best_params.csv` containing the best parameters found.
+
+---
+
+### Day 12: Data Drift Detection
+
+**Goal:** Detect data drift between historical training data and recent data.
+
+- **Methods:** Used Population Stability Index (PSI) and Kolmogorov-Smirnov (KS) two-sample tests.
+- **Findings:** Computed drift for key features (revenue, quantity, transaction count, etc.) and classified severity as No Drift, Moderate, or Significant.
+- **Output:** `drift_report.csv` detailing the distribution shifts.
+
+---
+
+### Day 13: Cross-Validation & Model Refinement
+
+**Goal:** Implement robust evaluation for time-series forecasting.
+
+- **Walk-Forward Validation:** Progressively expanded the training window, predicting the next 30 days to test model stability over time.
+- **Metrics Tracked:** MAPE, MAE, and RMSE per fold.
+- **Output:** `cv_results.csv` logging the performance across all time splits.
+
+---
+
+### Day 14: Week 2 MLflow Checkpoint
+
+**Goal:** Consolidate Week 2 work and track all models in MLflow.
+
+- Logged XGBoost churn predictions, Optuna parameters, data drift results, and cross-validation metrics into MLflow.
+- Generated a comprehensive 6-panel summary dashboard for Week 2 (`40_week2_summary.png`).
+
+---
+
+### Interactive Streamlit Dashboard
+
+**Goal:** Build a multi-page web application to visualize all project insights.
+
+Created an interactive dashboard (`dashboard/app.py`) with 4 distinct pages:
+1. **Sales Dashboard:** Revenue trends, KPIs, transaction volume, and temporal analysis.
+2. **Customer Dashboard:** Segmentation visualizations, RFM distributions, and churn risk profiling.
+3. **Forecast Dashboard:** Comparison of Prophet vs. LSTM vs. Ensemble models with a 30-day future outlook.
+4. **Inventory Dashboard:** Stock level simulation, reorder timelines, and demand distribution analysis.
+
+---
+
 ## Data Flow Summary
 
 ```
@@ -383,7 +458,21 @@ Raw Excel File (525K rows, 8 columns)
     │
     ├── [Day 7] MLflow logging of all experiments
     │
-    └── [Day 8] Ensemble → ensemble_predictions.csv + model_comparison.csv
+    ├── [Day 8] Ensemble → ensemble_predictions.csv + model_comparison.csv
+    │
+    ├── [Day 9] Churn Prediction → customer_churn.csv
+    │
+    ├── [Day 10] Inventory Optimization → inventory_metrics.csv, inventory_simulation.csv
+    │
+    ├── [Day 11] Hyperparameter Tuning → optuna_best_params.csv
+    │
+    ├── [Day 12] Drift Detection → drift_report.csv
+    │
+    ├── [Day 13] Cross-Validation → cv_results.csv
+    │
+    ├── [Day 14] Week 2 MLflow logging
+    │
+    └── [Dashboard] Streamlit Interactive Web App (dashboard/app.py)
 ```
 
 ---
@@ -404,6 +493,12 @@ Raw Excel File (525K rows, 8 columns)
 | lstm_predictions.csv | 30 | 4 | LSTM test set predictions |
 | ensemble_predictions.csv | 30 | 8 | All model predictions on test set |
 | model_comparison.csv | 6 | 4 | Final model ranking |
+| customer_churn.csv | 4,312 | 12 | RFM data + Churn probability & risk levels |
+| inventory_metrics.csv | 8 | 2 | Computed inventory optimization parameters |
+| inventory_simulation.csv | 374 | 5 | Daily stock levels and stockout events |
+| optuna_best_params.csv | 9 | 2 | Best parameters from XGBoost Optuna tuning |
+| drift_report.csv | 5 | 5 | PSI and KS test results for data drift |
+| cv_results.csv | ~10 | 6 | Walk-forward cross validation results |
 
 ### Figures (`reports/figures/`)
 
