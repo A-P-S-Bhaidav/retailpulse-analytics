@@ -4,48 +4,83 @@ import streamlit as st
 
 st.set_page_config(
     page_title="RetailPulse Analytics",
-    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Custom CSS
+# Professional Corporate CSS styling
 st.markdown("""
 <style>
+    /* Main typography and background */
+    .stApp {
+        background-color: #F8F9FA;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    /* Header styling */
     .main-header {
-        font-size: 2.5rem; font-weight: 700; color: #1a1a2e;
-        text-align: center; padding: 1rem 0; margin-bottom: 1rem;
+        font-size: 2.25rem; 
+        font-weight: 600; 
+        color: #111827;
+        padding-bottom: 0.5rem; 
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #E5E7EB;
     }
-    .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 1.5rem; border-radius: 12px; color: white; text-align: center;
+    
+    /* Metric Cards Override (Streamlit native metrics) */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #111827;
     }
-    .metric-value { font-size: 2rem; font-weight: 700; }
-    .metric-label { font-size: 0.9rem; opacity: 0.85; }
-    .stTabs [data-baseweb="tab-list"] { gap: 2rem; }
-    .stTabs [data-baseweb="tab"] {
-        font-size: 1.1rem; font-weight: 600; padding: 0.8rem 1.5rem;
+    [data-testid="stMetricLabel"] {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #6B7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    [data-testid="stMetricDelta"] {
+        font-size: 0.875rem;
+    }
+    
+    /* Clean headers */
+    h1, h2, h3 {
+        color: #111827 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Dataframes */
+    .stDataFrame {
+        border-radius: 8px;
+        border: 1px solid #E5E7EB;
+        overflow: hidden;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-header">RetailPulse Analytics Platform</div>', unsafe_allow_html=True)
+st.sidebar.markdown("### RetailPulse Analytics")
+st.sidebar.markdown("Executive Intelligence Platform")
+st.sidebar.markdown("---")
 
 page = st.sidebar.radio(
-    "Navigation",
-    ["Sales Dashboard", "Customer Dashboard", "Forecast Dashboard", "Inventory Dashboard"],
+    "Modules",
+    ["Executive Sales Summary", "Customer Intelligence", "Demand Forecasting", "Inventory Optimization"],
     index=0,
 )
 
-if page == "Sales Dashboard":
+st.sidebar.markdown("---")
+st.sidebar.markdown('<span style="color:#6B7280; font-size:0.8rem;">Data synchronized up to: Dec 2011</span>', unsafe_allow_html=True)
+
+if page == "Executive Sales Summary":
     from pages import sales
     sales.render()
-elif page == "Customer Dashboard":
+elif page == "Customer Intelligence":
     from pages import customers
     customers.render()
-elif page == "Forecast Dashboard":
+elif page == "Demand Forecasting":
     from pages import forecast
     forecast.render()
-elif page == "Inventory Dashboard":
+elif page == "Inventory Optimization":
     from pages import inventory
     inventory.render()
