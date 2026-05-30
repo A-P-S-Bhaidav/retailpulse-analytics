@@ -134,8 +134,8 @@ st.sidebar.markdown("""
     <div style="color:#94A3B8;font-size:0.68rem;text-transform:uppercase;
                 letter-spacing:0.08em;font-weight:600;margin-bottom:6px;">Coverage</div>
     Dec 2009 – Dec 2011<br>
-    <span style="color:#CBD5E1;">525,461 transactions</span><br>
-    <span style="color:#CBD5E1;">4,312 unique customers</span>
+    <span style="color:#CBD5E1;">1,033,034 transactions</span><br>
+    <span style="color:#CBD5E1;">5,878 unique customers</span>
   </div>
 </div>
 """, unsafe_allow_html=True)
