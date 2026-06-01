@@ -243,9 +243,11 @@ kubectl apply -f k8s/deployment.yaml
 
 1. **Python 3.13 compatibility** — scikit-learn crashed; upgraded to 1.8.0 and XGBoost 3.2.0
 2. **Dataset scope validation** — Initially used only 1 of 2 Excel sheets (50% of data); merging and deduplicating the overlapping December 2010 gave 34,337 duplicates to handle
-3. **LSTM overfitting** — Addressed with dropout (20%), early stopping (patience=15), and LR scheduler
-4. **Data drift** — All key features showed PSI > 0.7, confirming periodic retraining is essential for production deployment
-5. **Class balance** — Churn is nearly 50/50 (50.9%); `scale_pos_weight` still used for logloss calibration
+3. **Daily → Weekly aggregation** — Daily MAPE was 21%, far above the 12% target. Switching to weekly smoothed out weekend closures and random spikes, reducing MAPE to 11.93%
+4. **UK holidays** — Adding 32 UK holidays to Prophet significantly improved accuracy near Christmas/Easter peaks
+5. **LSTM data limitation** — 99 weekly rows is too few for LSTM (13.35% MAPE vs Prophet's 11.93%); the optimal blend weight α=1.0 confirmed Prophet dominates with this dataset size
+6. **Data drift** — All key features showed PSI > 0.7, confirming periodic retraining is essential for production deployment
+7. **Chart visibility** — Streamlit's default theme overrode Plotly chart colors; fixed by hardcoding `#111827` (near-black) in all chart text elements
 
 ---
 
