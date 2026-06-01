@@ -11,7 +11,7 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "processe
 
 def render():
     page_header("3", "Demand Forecasting",
-                "Hybrid Prophet + LSTM ensemble — 30-day revenue outlook with confidence bands.")
+                "Hybrid Prophet + LSTM ensemble — 4-week revenue outlook with confidence bands.")
 
     prophet_ready = pd.read_csv(os.path.join(DATA_DIR, "prophet_ready.csv"), parse_dates=["ds"])
     forecast_30d  = pd.read_csv(os.path.join(DATA_DIR, "prophet_forecast_30d.csv"), parse_dates=["ds"])
@@ -27,14 +27,14 @@ def render():
     kpi_card(c1, "Best Model",            best_row["Model"],       "Lowest test MAPE")
     kpi_card(c2, "Best MAPE",             f"{best_row['MAPE (%)']:.2f}%", "Mean Absolute % Error",
              value_color=C["green"])
-    kpi_card(c3, "30-Day Avg Forecast",   f"£{avg_fc:,.0f}",       "Daily average revenue")
-    kpi_card(c4, "30-Day Peak",           f"£{max_fc:,.0f}",       "Maximum forecast day")
+    kpi_card(c3, "Weekly Avg Forecast",   f"£{avg_fc:,.0f}",       "Average weekly revenue")
+    kpi_card(c4, "Peak Week",             f"£{max_fc:,.0f}",       "Highest forecast week")
     kpi_card(c5, "Forecast Swing",        f"£{fc_range:,.0f}",     "Peak minus trough")
 
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
 
     # ── Historical + 30-day forecast ──────────────────────────────────────────
-    section_title("Historical Revenue + 30-Day Forward Forecast")
+    section_title("Historical Weekly Revenue + 4-Week Forward Forecast")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=prophet_ready["ds"], y=prophet_ready["y"],
@@ -50,7 +50,7 @@ def render():
     ))
     fig.add_trace(go.Scatter(
         x=forecast_30d["ds"], y=forecast_30d["yhat"],
-        mode="lines+markers", name="30-Day Forecast",
+        mode="lines+markers", name="4-Week Forecast",
         line=dict(color=C["green"], width=2.5),
         marker=dict(size=5, color=C["green"]),
     ))
@@ -67,7 +67,7 @@ def render():
     l, r = st.columns([1.3, 0.7])
 
     with l:
-        section_title("Test Set: All Models vs. Actual Revenue")
+        section_title("Test Set: All Models vs. Actual Weekly Revenue")
         fig2 = go.Figure()
         if "actual" in ensemble.columns:
             fig2.add_trace(go.Scatter(
@@ -187,7 +187,7 @@ def render():
     display["RMSE"] = display["RMSE"].apply(lambda v: f"£{v:,.0f}")
     st.dataframe(display, use_container_width=True, hide_index=True)
 
-    section_title("30-Day Forecast Detail")
+    section_title("4-Week Forecast Detail")
     fc_display = forecast_30d[["ds", "yhat", "yhat_lower", "yhat_upper"]].copy()
     fc_display["ds"] = fc_display["ds"].dt.strftime("%d %b %Y")
     fc_display.columns = ["Date", "Forecast (£)", "Lower Bound (£)", "Upper Bound (£)"]

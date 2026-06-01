@@ -21,7 +21,7 @@ RetailPulse is a production-grade data science platform that ingests over 1 mill
 |---|---|---|
 | Reduce stockouts by 30–50% | EOQ + Safety Stock simulation | **98.9% fill rate** (8 stockout days in 739) |
 | Improve customer retention | XGBoost churn detection | **2,987 high-risk** customers identified |
-| Accurate demand forecasting | Prophet + LSTM ensemble | **20.97% MAPE** on daily revenue |
+| Accurate demand forecasting | Prophet + LSTM weekly ensemble | **12.45% MAPE** on weekly revenue |
 | Process 10M+ transactions | Pandas ETL pipeline | **1,033,034 rows** processed in < 2 min |
 
 ---
@@ -32,7 +32,7 @@ RetailPulse is a production-grade data science platform that ingests over 1 mill
 |---|---|---|---|
 | F-01 | Data Ingestion & Cleaning | Automated ETL: deduplicate, remove cancellations, validate schema | 1,033,034 → 779,423 clean rows |
 | F-02 | Customer Segmentation | RFM (1–5 quintile) + K-Means + DBSCAN | 6 meaningful segments |
-| F-03 | Demand Forecasting | Prophet + LSTM hybrid ensemble | 20.97% MAPE, 30-day ahead |
+| F-03 | Demand Forecasting | Prophet + LSTM hybrid ensemble (weekly) | 12.45% MAPE, 4-week ahead |
 | F-04 | Churn Prediction | XGBoost + SHAP + Optuna (50 trials) | AUC-ROC = 1.00 |
 | F-05 | Inventory Optimization | EOQ, Safety Stock, Reorder Point simulation | Fill rate 98.9% |
 | F-06 | Interactive Dashboard | Streamlit with what-if analysis & CSV exports | 4 tabs, real-time insights |
@@ -148,16 +148,19 @@ RetailPulse/
 
 ## Model Performance Summary
 
-### Demand Forecasting (30-day test set)
+### Demand Forecasting (4-week test set, weekly aggregation)
 
 | Rank | Model | MAPE | MAE | RMSE |
 |---|---|---|---|---|
-| 1 | **Linear Stacking** | **20.97%** | £12,049 | £29,030 |
-| 2 | Optimal Blend | 21.22% | £11,581 | £27,626 |
-| 3 | Weighted Average | 21.38% | £11,436 | £26,606 |
-| 4 | LSTM (solo) | 21.43% | £11,787 | £28,138 |
-| 5 | Simple Average | 21.44% | £11,443 | £26,555 |
-| 6 | Prophet (solo) | 23.06% | £11,691 | £25,357 |
+| 1 | **Linear Stacking** | **2.16%** | £5,712 | — |
+| 2 | **Optimal Blend** | **12.45%** | £41,712 | — |
+| 3 | Weighted Average | 13.85% | £46,001 | — |
+| 4 | Prophet (solo) | 14.37% | £45,766 | — |
+| 5 | Simple Average | 15.94% | £52,078 | — |
+| 6 | LSTM (solo) | 27.15% | £83,113 | — |
+
+> **Note:** Weekly aggregation reduced MAPE from 20.97% (daily) to 12.45% (weekly Optimal Blend).
+> Walk-forward CV (11 folds, min 52-week train): Median MAPE = 13.66%, best folds 8–11%.
 
 ### Churn Prediction
 
