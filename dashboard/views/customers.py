@@ -10,12 +10,11 @@ from views.design import C, LAYOUT, kpi_card, page_header, section_title
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "processed")
 
 SEG_COLORS = {
-    "VIP / Champions": C["navy"],
-    "Dormant":         "#94A3B8",
-    "High Value":      C["teal"],
-    "At Risk":         C["red"],
-    "New Customers":   C["green"],
-    "Loyal":           "#7C3AED",
+    "Champions":  C["navy"],
+    "Loyal":      "#7C3AED",
+    "Potential":  C["teal"],
+    "At Risk":    C["amber"],
+    "Dormant":    "#94A3B8",
 }
 
 RISK_COLORS = {
@@ -53,7 +52,7 @@ def render():
     l, r = st.columns(2)
 
     with l:
-        section_title("Customer Segments — K-Means (k = 4)")
+        section_title("Customer Segments — RFM Score-Based (5 tiers)")
         seg_counts = segments["kmeans_label"].value_counts().reset_index()
         seg_counts.columns = ["Segment", "Customers"]
         fig = go.Figure(go.Pie(
@@ -75,7 +74,7 @@ def render():
         st.plotly_chart(fig, use_container_width=True)
 
     with r:
-        section_title("RFM Score Distribution (Scale 3–9)")
+        section_title("RFM Score Distribution (Scale 3–15)")
         fig2 = go.Figure(go.Histogram(
             x=segments["rfm_score"], nbinsx=12,
             marker=dict(color=C["teal"], line=dict(color="white", width=1.5)),
