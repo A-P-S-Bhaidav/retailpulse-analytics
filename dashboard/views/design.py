@@ -15,8 +15,8 @@ C = {
     # Neutrals — high contrast on white/light bg
     "text_h":      "#0F172A",   # headings: near-black
     "text_b":      "#1E293B",   # body text: very dark slate
-    "text_sub":    "#475569",   # sub-labels: medium slate (WCAG AA)
-    "text_hint":   "#64748B",   # hints / captions
+    "text_sub":    "#334155",   # sub-labels: dark slate (WCAG AAA)
+    "text_hint":   "#475569",   # hints / captions: medium-dark
 
     # Backgrounds
     "bg_page":     "#EEF2F7",   # page background

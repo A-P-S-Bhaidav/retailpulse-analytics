@@ -119,8 +119,9 @@ def render():
     # ── What-If Scenario Analysis ─────────────────────────────────────────────
     st.markdown("---")
     section_title("What-If Scenario Analysis")
+    text_color = C["text_sub"]
     st.markdown(
-        f"<p style='color:{C[\"text_s\"]};font-size:14px;margin-bottom:16px;'>"
+        f"<p style='color:{text_color};font-size:14px;margin-bottom:16px;'>"
         "Adjust parameters to simulate different business scenarios on the 30-day forecast.</p>",
         unsafe_allow_html=True,
     )

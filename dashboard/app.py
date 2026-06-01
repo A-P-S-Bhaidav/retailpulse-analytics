@@ -91,6 +91,38 @@ st.markdown("""
 
   /* ── Slider label ── */
   [data-testid="stSlider"] label {
+    color: #1E293B !important;
+    font-weight: 600 !important;
+  }
+
+  /* ── All widget labels high contrast ── */
+  .stSelectbox label, .stMultiSelect label, .stTextInput label,
+  .stNumberInput label, .stTextArea label, .stDateInput label,
+  .stCheckbox label, .stRadio label {
+    color: #1E293B !important;
+    font-weight: 600 !important;
+  }
+
+  /* ── Download buttons ── */
+  .stDownloadButton button {
+    color: #1E293B !important;
+    font-weight: 600 !important;
+    border: 1px solid #CBD5E1 !important;
+    background: #FFFFFF !important;
+  }
+  .stDownloadButton button:hover {
+    background: #F1F5F9 !important;
+    border-color: #0891B2 !important;
+    color: #0891B2 !important;
+  }
+
+  /* ── Markdown text always dark ── */
+  .stMarkdown p, .stMarkdown li, .stMarkdown span {
+    color: #1E293B;
+  }
+
+  /* ── Tab widget labels ── */
+  .stTabs [data-baseweb="tab"] {
     color: #334155 !important;
     font-weight: 600 !important;
   }
