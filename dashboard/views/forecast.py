@@ -116,7 +116,69 @@ def render():
                                )})
         st.plotly_chart(fig3, use_container_width=True)
 
+    # ── What-If Scenario Analysis ─────────────────────────────────────────────
+    st.markdown("---")
+    section_title("What-If Scenario Analysis")
+    st.markdown(
+        f"<p style='color:{C[\"text_s\"]};font-size:14px;margin-bottom:16px;'>"
+        "Adjust parameters to simulate different business scenarios on the 30-day forecast.</p>",
+        unsafe_allow_html=True,
+    )
+
+    wl, wr = st.columns(2)
+    with wl:
+        growth_pct = st.slider("Revenue growth/decline (%)", -30, 50, 0, key="wi_growth",
+                               help="Simulate overall demand change (e.g. +20% for a promotion)")
+    with wr:
+        seasonal_pct = st.slider("Seasonal adjustment (%)", -20, 40, 0, key="wi_seasonal",
+                                 help="Simulate seasonal effects (e.g. +30% for holiday season)")
+
+    combined_factor = 1 + (growth_pct / 100) + (seasonal_pct / 100)
+    fc_whatif = forecast_30d.copy()
+    fc_whatif["yhat_adjusted"] = fc_whatif["yhat"] * combined_factor
+    fc_whatif["yhat_upper_adj"] = fc_whatif["yhat_upper"] * combined_factor
+    fc_whatif["yhat_lower_adj"] = fc_whatif["yhat_lower"] * combined_factor
+
+    fig_wi = go.Figure()
+    fig_wi.add_trace(go.Scatter(
+        x=fc_whatif["ds"], y=fc_whatif["yhat"],
+        mode="lines", name="Base Forecast",
+        line=dict(color="#94A3B8", width=2, dash="dash"),
+    ))
+    fig_wi.add_trace(go.Scatter(
+        x=pd.concat([fc_whatif["ds"], fc_whatif["ds"][::-1]]),
+        y=pd.concat([fc_whatif["yhat_upper_adj"], fc_whatif["yhat_lower_adj"][::-1]]),
+        fill="toself", fillcolor="rgba(5,150,105,0.10)",
+        line=dict(color="rgba(255,255,255,0)"),
+        name="Adjusted Confidence Band",
+    ))
+    fig_wi.add_trace(go.Scatter(
+        x=fc_whatif["ds"], y=fc_whatif["yhat_adjusted"],
+        mode="lines+markers", name=f"Adjusted Forecast ({combined_factor:.0%})",
+        line=dict(color=C["green"], width=2.5),
+        marker=dict(size=5, color=C["green"]),
+    ))
+    fig_wi.update_layout(**{**LAYOUT, "height": 350,
+                             "xaxis_title": "Date", "yaxis_title": "Revenue (£)",
+                             "legend": dict(
+                                 orientation="h", yanchor="bottom", y=1.02,
+                                 font=dict(color=C["text_b"], size=12),
+                             )})
+    st.plotly_chart(fig_wi, use_container_width=True)
+
+    # ── Scenario KPIs ────
+    wi1, wi2, wi3 = st.columns(3)
+    adj_total = fc_whatif["yhat_adjusted"].sum()
+    base_total = forecast_30d["yhat"].sum()
+    delta = adj_total - base_total
+    kpi_card(wi1, "Adjusted 30-Day Total", f"£{adj_total:,.0f}", "Scenario revenue")
+    kpi_card(wi2, "Base 30-Day Total", f"£{base_total:,.0f}", "Original forecast")
+    kpi_card(wi3, "Revenue Impact", f"{'+'if delta>=0 else ''}£{delta:,.0f}",
+             f"{'Gain' if delta >= 0 else 'Loss'} vs. baseline",
+             value_color=C["green"] if delta >= 0 else C["red"])
+
     # ── Tables ────────────────────────────────────────────────────────────────
+    st.markdown("---")
     section_title("Full Model Performance Comparison")
     display = comparison.copy()
     display["MAPE (%)"] = display["MAPE (%)"].apply(lambda v: f"{v:.2f}%")
@@ -131,3 +193,18 @@ def render():
     for col in ["Forecast (£)", "Lower Bound (£)", "Upper Bound (£)"]:
         fc_display[col] = fc_display[col].apply(lambda v: f"£{v:,.0f}")
     st.dataframe(fc_display, use_container_width=True, hide_index=True, height=310)
+
+    # ── Export buttons ────────────────────────────────────────────────────────
+    ex1, ex2 = st.columns(2)
+    with ex1:
+        st.download_button(
+            label="Export Forecast (CSV)",
+            data=forecast_30d.to_csv(index=False),
+            file_name="forecast_30d_export.csv", mime="text/csv",
+        )
+    with ex2:
+        st.download_button(
+            label="Export Model Comparison (CSV)",
+            data=comparison.to_csv(index=False),
+            file_name="model_comparison_export.csv", mime="text/csv",
+        )

@@ -119,3 +119,19 @@ def render():
     # ── Parameters table ──────────────────────────────────────────────────────
     section_title("Optimization Parameters Reference")
     st.dataframe(metrics, use_container_width=True, hide_index=True)
+
+    # ── Export ────────────────────────────────────────────────────────────────
+    ex1, ex2 = st.columns(2)
+    with ex1:
+        st.download_button(
+            label="Export Simulation Data (CSV)",
+            data=sim.to_csv(index=False),
+            file_name="inventory_simulation_export.csv", mime="text/csv",
+        )
+    with ex2:
+        st.download_button(
+            label="Export Metrics (CSV)",
+            data=metrics.to_csv(index=False),
+            file_name="inventory_metrics_export.csv", mime="text/csv",
+        )
+

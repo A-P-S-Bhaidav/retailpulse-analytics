@@ -10,11 +10,12 @@ from views.design import C, LAYOUT, kpi_card, page_header, section_title
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "processed")
 
 SEG_COLORS = {
-    "Champions":  C["navy"],
-    "Loyal":      "#7C3AED",
-    "Potential":  C["teal"],
-    "At Risk":    C["amber"],
-    "Dormant":    "#94A3B8",
+    "Champions":          C["navy"],
+    "Loyal":              "#7C3AED",
+    "Potential Loyalists": C["teal"],
+    "Need Attention":     "#F59E0B",
+    "At Risk":            C["amber"],
+    "Dormant":            "#94A3B8",
 }
 
 RISK_COLORS = {
@@ -26,7 +27,7 @@ RISK_COLORS = {
 
 def render():
     page_header("2", "Customer Intelligence",
-                "RFM segmentation, K-Means clustering, and churn risk profiling.")
+                "RFM segmentation, behavioral clustering, and churn risk profiling.")
 
     segments = pd.read_csv(os.path.join(DATA_DIR, "customer_segments.csv"))
     churn_path = os.path.join(DATA_DIR, "customer_churn.csv")
@@ -52,7 +53,7 @@ def render():
     l, r = st.columns(2)
 
     with l:
-        section_title("Customer Segments — RFM Score-Based (5 tiers)")
+        section_title("Customer Segments — RFM Score-Based (6 tiers)")
         seg_counts = segments["kmeans_label"].value_counts().reset_index()
         seg_counts.columns = ["Segment", "Customers"]
         fig = go.Figure(go.Pie(
@@ -63,12 +64,12 @@ def render():
                 colors=[SEG_COLORS.get(s, "#94A3B8") for s in seg_counts["Segment"]],
                 line=dict(color="white", width=2.5),
             ),
-            textfont=dict(color=C["text_b"], size=12),
+            textfont=dict(color=C["text_b"], size=11),
             hovertemplate="<b>%{label}</b><br>%{value:,} customers (%{percent})<extra></extra>",
         ))
         fig.update_layout(**{**LAYOUT, "height": 360, "showlegend": True,
                               "legend": dict(
-                                  font=dict(color=C["text_b"], size=12),
+                                  font=dict(color=C["text_b"], size=11),
                                   orientation="v", x=1.02, y=0.5,
                               )})
         st.plotly_chart(fig, use_container_width=True)
@@ -76,7 +77,7 @@ def render():
     with r:
         section_title("RFM Score Distribution (Scale 3–15)")
         fig2 = go.Figure(go.Histogram(
-            x=segments["rfm_score"], nbinsx=12,
+            x=segments["rfm_score"], nbinsx=13,
             marker=dict(color=C["teal"], line=dict(color="white", width=1.5)),
             hovertemplate="Score: %{x}<br>Customers: %{y}<extra></extra>",
         ))
@@ -117,6 +118,14 @@ def render():
     summary.columns = ["Customers", "Avg Recency (days)", "Avg Orders", "Avg Spend (£)", "Avg RFM Score"]
     st.dataframe(summary.style.background_gradient(subset=["Avg Spend (£)"], cmap="Blues"),
                  use_container_width=True)
+
+    # ── Export button ─────────────────────────────────────────────────────────
+    st.download_button(
+        label="Export Segment Data (CSV)",
+        data=segments.to_csv(index=False),
+        file_name="customer_segments_export.csv",
+        mime="text/csv",
+    )
 
     # ── Churn analysis ────────────────────────────────────────────────────────
     if churn is not None:
@@ -163,4 +172,11 @@ def render():
         st.dataframe(
             top_risk.style.background_gradient(subset=["Churn Probability"], cmap="Reds"),
             use_container_width=True,
+        )
+
+        st.download_button(
+            label="Export Churn Data (CSV)",
+            data=churn.to_csv(index=False),
+            file_name="churn_analysis_export.csv",
+            mime="text/csv",
         )

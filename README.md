@@ -1,130 +1,260 @@
-<div align="center">
-  <h1>RetailPulse Analytics</h1>
-  <p>An end-to-end data science and machine learning platform for retail intelligence.</p>
-  
-  [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://python.org)
-  [![Streamlit](https://img.shields.io/badge/Streamlit-1.34-FF4B4B.svg)](https://streamlit.io)
-  [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-EE4C2C.svg)](https://pytorch.org)
-  [![XGBoost](https://img.shields.io/badge/XGBoost-3.2-blue.svg)](https://xgboost.readthedocs.io)
-  [![MLflow](https://img.shields.io/badge/MLflow-Tracking-0194E2.svg)](https://mlflow.org)
-</div>
+# RetailPulse — AI-Powered Customer Analytics & Demand Forecasting Platform
 
-## Overview
+**End-to-End Data Science & Analytics Solution for Retail Demand Prediction & Customer Insights**
 
-RetailPulse is a comprehensive machine learning pipeline and interactive dashboard designed to solve core business problems for retail companies. It ingests raw transactional data and applies advanced modeling to provide actionable insights into customer behavior, demand forecasting, and inventory optimization.
+Built for **Zidio Development** — Data Science & Analytics Domain | June 2026
 
-### Key Features
-- **Customer Segmentation:** Groups 5,878 customers using K-Means and DBSCAN based on Recency, Frequency, and Monetary (RFM) value.
-- **Demand Forecasting:** Predicts daily revenue 30 days into the future using a Hybrid Ensemble of **Meta Prophet** and **LSTM (PyTorch)** neural networks.
-- **Churn Prediction:** Identifies at-risk customers using an **XGBoost** classifier, fully optimized via **Optuna** and explained using **SHAP** values.
-- **Inventory Optimization:** Simulates stock levels and calculates optimal Economic Order Quantity (EOQ), Safety Stock, and Reorder Points to minimize stockouts.
-- **Experiment Tracking:** All models and parameters are versioned and logged using **MLflow**.
-- **Data Drift Detection:** Monitors input feature distributions using Population Stability Index (PSI) and Kolmogorov-Smirnov (KS) tests.
+---
+
+## Project Overview
+
+RetailPulse is a production-grade data science platform that ingests over 1 million retail transactions and delivers four core analytical capabilities:
+
+1. **Customer Segmentation** — 6-tier RFM scoring with K-Means and DBSCAN validation
+2. **Demand Forecasting** — Hybrid Prophet + LSTM ensemble with 30-day forward predictions
+3. **Churn Prediction** — XGBoost classifier with SHAP explainability and Optuna tuning
+4. **Inventory Optimization** — EOQ, Safety Stock, and Reorder Point simulation with 98.9% fill rate
+
+### Business Impact
+
+| Target | Method | Result |
+|---|---|---|
+| Reduce stockouts by 30–50% | EOQ + Safety Stock simulation | **98.9% fill rate** (8 stockout days in 739) |
+| Improve customer retention | XGBoost churn detection | **2,987 high-risk** customers identified |
+| Accurate demand forecasting | Prophet + LSTM ensemble | **20.97% MAPE** on daily revenue |
+| Process 10M+ transactions | Pandas ETL pipeline | **1,033,034 rows** processed in < 2 min |
+
+---
+
+## Key Features
+
+| ID | Feature | Description | Acceptance Criteria |
+|---|---|---|---|
+| F-01 | Data Ingestion & Cleaning | Automated ETL: deduplicate, remove cancellations, validate schema | 1,033,034 → 779,423 clean rows |
+| F-02 | Customer Segmentation | RFM (1–5 quintile) + K-Means + DBSCAN | 6 meaningful segments |
+| F-03 | Demand Forecasting | Prophet + LSTM hybrid ensemble | 20.97% MAPE, 30-day ahead |
+| F-04 | Churn Prediction | XGBoost + SHAP + Optuna (50 trials) | AUC-ROC = 1.00 |
+| F-05 | Inventory Optimization | EOQ, Safety Stock, Reorder Point simulation | Fill rate 98.9% |
+| F-06 | Interactive Dashboard | Streamlit with what-if analysis & CSV exports | 4 tabs, real-time insights |
+
+---
+
+## Technology Stack
+
+| Layer | Technology | Rationale |
+|---|---|---|
+| Language | Python 3.11 | Data science ecosystem |
+| Data Processing | Pandas, NumPy, Scikit-learn | Core data manipulation and ML |
+| Forecasting | Prophet + LSTM (PyTorch) | Hybrid time-series forecasting |
+| Classification | XGBoost + SHAP | Gradient boosting with explainability |
+| Tuning | Optuna (50 Bayesian trials) | Automated hyperparameter optimization |
+| Dashboard | Streamlit + Plotly | Fast interactive analytics |
+| Experiment Tracking | MLflow | Model versioning and reproducibility |
+| Drift Detection | Manual PSI + KS tests | Distribution shift monitoring |
+| Containerization | Docker (multi-stage) | Consistent deployment |
+| Orchestration | Kubernetes | Scalable production deployment |
+| CI/CD | GitHub Actions | Automated lint, test, build |
 
 ---
 
 ## Dataset
 
-| Property | Detail |
+| Property | Value |
 |---|---|
-| Name | Online Retail II |
-| Source | UCI Machine Learning Repository |
-| Total records | 1,067,371 (raw), 1,033,034 (after deduplication) |
-| Period | 01 December 2009 – 09 December 2011 |
-| Format | Two Excel sheets (Year 2009-2010 and Year 2010-2011), merged and deduplicated |
+| Source | Online Retail II, UCI Machine Learning Repository |
+| Period | December 2009 – December 2011 (2 years) |
+| Raw rows | 1,067,371 (two Excel sheets, deduplicated to 1,033,034) |
+| Clean rows | 779,423 (after removing cancellations, null Customer IDs, bad prices) |
+| Unique customers | 5,878 |
+| Trading days | 739 |
+| Total revenue | £17,374,252 |
 
 ---
 
-## Project Architecture
+## Architecture
 
-The project is structured into 14 sequential Jupyter Notebooks representing a chronological data science workflow, culminating in a production-ready Streamlit dashboard.
+```
+Raw Data (Excel)
+    │
+    ├─► 01_eda_exploration.ipynb
+    ├─► 02_data_cleaning_feature_engineering.ipynb
+    │       ├─► daily_sales_features.csv (739 rows × 24 cols)
+    │       └─► customer_rfm.csv (5,878 rows × 10 cols)
+    │
+    ├─► 03_customer_segmentation.ipynb ─► customer_segments.csv (6 segments)
+    ├─► 04_timeseries_preparation.ipynb ─► prophet_ready.csv, lstm_ready.csv
+    ├─► 05_prophet_forecasting.ipynb ─► prophet_forecast_30d.csv
+    ├─► 06_lstm_forecasting.ipynb ─► lstm_predictions.csv
+    ├─► 07_mlflow_experiment_tracking.ipynb ─► MLflow runs
+    ├─► 08_hybrid_ensemble.ipynb ─► ensemble_predictions.csv, model_comparison.csv
+    ├─► 09_churn_prediction.ipynb ─► customer_churn.csv
+    ├─► 10_inventory_optimization.ipynb ─► inventory_simulation.csv
+    ├─► 11_optuna_tuning.ipynb ─► optuna_best_params.csv
+    ├─► 12_drift_detection.ipynb ─► drift_report.csv
+    ├─► 13_model_refinement.ipynb ─► cv_results.csv
+    └─► 14_mlflow_week2.ipynb ─► Week 2 summary
+            │
+            ▼
+    Streamlit Dashboard (4 tabs)
+        ├─ Sales Summary
+        ├─ Customer Intelligence
+        ├─ Demand Forecasting (+ What-If Analysis)
+        └─ Inventory Optimization
+```
 
-```text
+---
+
+## Project Structure
+
+```
 RetailPulse/
+├── dashboard/
+│   ├── app.py                    # Main Streamlit application
+│   └── views/
+│       ├── design.py             # Design system (colors, layouts, KPI cards)
+│       ├── sales.py              # Tab 1: Executive Sales Summary
+│       ├── customers.py          # Tab 2: Customer Intelligence
+│       ├── forecast.py           # Tab 3: Demand Forecasting + What-If
+│       └── inventory.py          # Tab 4: Inventory Optimization
+├── notebooks/
+│   ├── 01_eda_exploration.ipynb         # Day 1: EDA
+│   ├── 02_data_cleaning_feature_engineering.ipynb  # Day 2: Cleaning + RFM
+│   ├── 03_customer_segmentation.ipynb   # Day 3: K-Means, DBSCAN, RFM segments
+│   ├── 04_timeseries_preparation.ipynb  # Day 4: Stationarity, decomposition
+│   ├── 05_prophet_forecasting.ipynb     # Day 5: Prophet baseline
+│   ├── 06_lstm_forecasting.ipynb        # Day 6: LSTM neural network
+│   ├── 07_mlflow_experiment_tracking.ipynb  # Day 7: MLflow Week 1
+│   ├── 08_hybrid_ensemble.ipynb         # Day 8: Prophet+LSTM ensemble
+│   ├── 09_churn_prediction.ipynb        # Day 9: XGBoost churn + SHAP
+│   ├── 10_inventory_optimization.ipynb  # Day 10: EOQ, Safety Stock, simulation
+│   ├── 11_optuna_tuning.ipynb           # Day 11: Bayesian hyperparameter tuning
+│   ├── 12_drift_detection.ipynb         # Day 12: PSI + KS drift detection
+│   ├── 13_model_refinement.ipynb        # Day 13: Walk-forward CV
+│   └── 14_mlflow_week2.ipynb            # Day 14: MLflow Week 2
 ├── data/
-│   ├── raw/                 # Raw transactional data (1,033,034 rows)
-│   └── processed/           # Engineered features and model outputs
-├── notebooks/               # Chronological pipeline (01 to 14)
-├── models/                  # Saved weights (LSTM, XGBoost)
-├── mlflow/                  # MLflow tracking registry
-├── reports/                 # Generated figures and analysis plots
-├── dashboard/               # Streamlit application
-│   ├── app.py               # Main entry point
-│   └── views/               # Dashboard module pages
-├── Dockerfile               # Containerization config
+│   ├── raw/                      # Raw dataset (gitignored)
+│   └── processed/                # All generated CSVs
+├── reports/figures/               # All generated plots (40+ figures)
+├── models/                        # Saved model artifacts
+├── mlflow/                        # MLflow tracking data
+├── k8s/                           # Kubernetes deployment manifests
+├── .github/workflows/ci.yml       # GitHub Actions CI/CD pipeline
+├── Dockerfile                     # Multi-stage Docker build
+├── requirements.txt               # Python dependencies
 └── README.md
 ```
 
 ---
 
-## Getting Started
+## Model Performance Summary
 
-### Prerequisites
-- Python 3.11+
-- Git
+### Demand Forecasting (30-day test set)
 
-### Installation
+| Rank | Model | MAPE | MAE | RMSE |
+|---|---|---|---|---|
+| 1 | **Linear Stacking** | **20.97%** | £12,049 | £29,030 |
+| 2 | Optimal Blend | 21.22% | £11,581 | £27,626 |
+| 3 | Weighted Average | 21.38% | £11,436 | £26,606 |
+| 4 | LSTM (solo) | 21.43% | £11,787 | £28,138 |
+| 5 | Simple Average | 21.44% | £11,443 | £26,555 |
+| 6 | Prophet (solo) | 23.06% | £11,691 | £25,357 |
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/A-P-S-Bhaidav/retailpulse-analytics.git
-   cd retailpulse-analytics
-   ```
+### Churn Prediction
 
-2. **Set up the virtual environment:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+| Metric | Value |
+|---|---|
+| ROC AUC | 1.0000 |
+| 5-Fold CV AUC | 1.0000 ± 0.0000 |
+| High Risk customers | 2,987 (50.8%) |
+| Optuna improvement | 50 Bayesian trials, best AUC maintained |
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r dashboard/requirements.txt
-   ```
+### Customer Segmentation (6 tiers)
 
-### Running the Dashboard Locally
+| Segment | RFM Score | Customers | Avg Recency | Avg Frequency | Avg Monetary |
+|---|---|---|---|---|---|
+| Champions | 13–15 | 1,295 (22.0%) | 26 days | 18.0 orders | £9,678 |
+| Loyal | 10–12 | 1,357 (23.1%) | 96 days | 5.6 orders | £2,263 |
+| Potential Loyalists | 8–9 | 980 (16.7%) | 181 days | 3.0 orders | £948 |
+| Need Attention | 7 | 473 (8.0%) | 259 days | 1.8 orders | £555 |
+| At Risk | 5–6 | 967 (16.5%) | 321 days | 1.4 orders | £386 |
+| Dormant | 3–4 | 806 (13.7%) | 517 days | 1.1 orders | £197 |
+
+### Inventory Optimization
+
+| Metric | Value |
+|---|---|
+| EOQ | 39,638 units |
+| Safety Stock (95%) | 54,809 units |
+| Reorder Point (95%) | 154,397 units |
+| Fill Rate | 98.9% |
+| Stockout Days | 8 of 739 |
+
+---
+
+## MLOps & Production Readiness
+
+- **Experiment Tracking:** All models logged in MLflow with parameters, metrics, and artifacts
+- **Drift Detection:** PSI and KS tests reveal significant drift across all features (PSI > 0.7 for 4 of 5 features), confirming periodic retraining is essential
+- **Walk-Forward CV:** 18-fold time-series cross-validation validates model stability across different time periods
+- **Containerization:** Multi-stage Docker build with health checks and non-root user
+- **CI/CD:** GitHub Actions pipeline with linting, testing, and Docker build stages
+- **Kubernetes:** Deployment and Service manifests for scalable production deployment
+
+---
+
+## Quick Start
+
+### Local Development
+
 ```bash
-cd dashboard
-streamlit run app.py
-```
-The application will be accessible at `http://localhost:8501`.
+# Clone the repository
+git clone https://github.com/A-P-S-Bhaidav/retailpulse-analytics.git
+cd retailpulse-analytics
 
-### Docker Deployment
+# Create virtual environment
+python3.11 -m venv .venv && source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the dashboard
+streamlit run dashboard/app.py
+```
+
+### Docker
+
 ```bash
 docker build -t retailpulse .
 docker run -p 8501:8501 retailpulse
 ```
 
----
+### Kubernetes
 
-## Pipeline Summary
-
-| Day | Notebook | What It Does |
-|---|---|---|
-| 1 | `01_eda_exploration` | Exploratory data analysis on 1,033,034 transactions |
-| 2 | `02_data_cleaning_feature_engineering` | Cleaning, RFM scoring, daily aggregation (739 trading days, 5,878 customers) |
-| 3 | `03_customer_segmentation` | K-Means (k=4) and DBSCAN clustering on RFM features |
-| 4 | `04_timeseries_preparation` | Stationarity tests (ADF, KPSS), seasonal decomposition |
-| 5 | `05_prophet_forecasting` | Prophet with weekly + monthly seasonality tuning (MAPE: 23.06%) |
-| 6 | `06_lstm_forecasting` | 2-layer LSTM with 30-day lookback (MAPE: 21.43%) |
-| 7 | `07_mlflow_experiment_tracking` | MLflow logging for Week 1 models |
-| 8 | `08_hybrid_ensemble` | Prophet + LSTM ensemble — 4 blending strategies (Best MAPE: 20.97%) |
-| 9 | `09_churn_prediction` | XGBoost binary classifier with SHAP explainability |
-| 10 | `10_inventory_optimization` | EOQ, Safety Stock, Reorder Point, 739-day simulation (Fill Rate: 98.9%) |
-| 11 | `11_optuna_tuning` | 50-trial Bayesian hyperparameter optimization for XGBoost |
-| 12 | `12_drift_detection` | PSI and KS tests for data drift monitoring |
-| 13 | `13_model_refinement` | Walk-forward cross-validation for Prophet |
-| 14 | `14_mlflow_week2` | MLflow logging for Week 2 models |
+```bash
+kubectl apply -f k8s/deployment.yaml
+```
 
 ---
 
-## Modeling Details
+## Challenges & Learnings
 
-- **Time-Series Forecasting:** Walk-forward cross-validation strategy, combining Prophet's strong grasp of seasonal trends with an LSTM's ability to capture non-linear sequences. The predictions are ensembled via blending search to minimize MAPE.
-- **Churn Classification:** XGBoost classifier with `scale_pos_weight` for class imbalance, tuned over 50 Bayesian optimization trials using Optuna to maximize ROC AUC.
-- **Inventory Optimization:** EOQ formula with 95% service level safety stock and 7-day lead time. Monte Carlo simulation over 739 historical days achieves 98.9% fill rate.
+1. **Python 3.13 compatibility** — scikit-learn crashed; upgraded to 1.8.0 and XGBoost 3.2.0
+2. **Dataset scope validation** — Initially used only 1 of 2 Excel sheets (50% of data); merging and deduplicating the overlapping December 2010 gave 34,337 duplicates to handle
+3. **LSTM overfitting** — Addressed with dropout (20%), early stopping (patience=15), and LR scheduler
+4. **Data drift** — All key features showed PSI > 0.7, confirming periodic retraining is essential for production deployment
+5. **Class balance** — Churn is nearly 50/50 (50.9%); `scale_pos_weight` still used for logloss calibration
 
 ---
 
-## License
-This project is licensed under the MIT License.
+## Future Roadmap
+
+- Real-time streaming ingestion with Apache Kafka
+- Automated retraining pipeline with Apache Airflow
+- A/B testing framework for retention campaigns
+- Prometheus + Grafana monitoring dashboards
+- Cloud deployment (AWS ECS or GCP Cloud Run)
+
+---
+
+*Built with Python, Prophet, PyTorch, XGBoost, Streamlit, and MLflow*
+*Zidio Development — Data Science & Analytics Domain — June 2026*

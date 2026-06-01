@@ -108,3 +108,11 @@ def render():
     fig4.update_layout(**{**LAYOUT, "height": 230,
                            "xaxis_title": "Date", "yaxis_title": "No. of Transactions"})
     st.plotly_chart(fig4, use_container_width=True)
+
+    # ── Export ────────────────────────────────────────────────────────────────
+    st.download_button(
+        label="Export Daily Sales Data (CSV)",
+        data=daily.to_csv(index=False),
+        file_name="daily_sales_export.csv", mime="text/csv",
+    )
+
