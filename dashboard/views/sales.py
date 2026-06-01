@@ -52,7 +52,7 @@ def render():
               "xaxis_title": "Date", "yaxis_title": "Revenue (£)",
               "legend": dict(orientation="h", yanchor="bottom", y=1.02,
                              xanchor="right", x=1,
-                             font=dict(color=C["text_b"], size=12))}
+                             font=dict(color="#111827", size=12))}
     fig.update_layout(**layout)
     st.plotly_chart(fig, use_container_width=True)
 
@@ -72,7 +72,7 @@ def render():
             marker_color=bar_colors,
             text=dow["total_revenue"].apply(lambda v: f"£{v:,.0f}"),
             textposition="outside",
-            textfont=dict(color=C["text_b"], size=11),
+            textfont=dict(color="#111827", size=11),
         ))
         fig2.update_layout(**{**LAYOUT, "height": 320,
                                "yaxis_title": "Avg Revenue (£)",
@@ -89,7 +89,7 @@ def render():
             marker_color=C["navy"],
             text=monthly["total_revenue"].apply(lambda v: f"£{v/1000:.0f}k"),
             textposition="outside",
-            textfont=dict(color=C["text_b"], size=11),
+            textfont=dict(color="#111827", size=11),
         ))
         fig3.update_layout(**{**LAYOUT, "height": 320,
                                "yaxis_title": "Revenue (£)",

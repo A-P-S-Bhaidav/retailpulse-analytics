@@ -77,7 +77,7 @@ def render():
                           "xaxis_title": "Date", "yaxis_title": "Units in Stock",
                           "legend": dict(
                               orientation="h", yanchor="bottom", y=1.02,
-                              font=dict(color=C["text_b"], size=12),
+                              font=dict(color="#111827", size=12),
                           )})
     st.plotly_chart(fig, use_container_width=True)
 
@@ -98,7 +98,7 @@ def render():
                        annotation_font=dict(color=C["amber"], size=12))
         fig2.add_vline(x=mean_qty + std_qty, line_dash="dot", line_color="#94A3B8",
                        annotation_text=f"+1σ: {mean_qty+std_qty:,.0f}",
-                       annotation_font=dict(color=C["text_sub"], size=11))
+                       annotation_font=dict(color="#1F2937", size=11))
         fig2.update_layout(**{**LAYOUT, "height": 330,
                                "xaxis_title": "Daily Units Sold",
                                "yaxis_title": "Number of Days"})

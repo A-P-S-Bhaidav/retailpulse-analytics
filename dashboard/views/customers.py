@@ -64,12 +64,12 @@ def render():
                 colors=[SEG_COLORS.get(s, "#94A3B8") for s in seg_counts["Segment"]],
                 line=dict(color="white", width=2.5),
             ),
-            textfont=dict(color=C["text_b"], size=11),
+            textfont=dict(color="#111827", size=11),
             hovertemplate="<b>%{label}</b><br>%{value:,} customers (%{percent})<extra></extra>",
         ))
         fig.update_layout(**{**LAYOUT, "height": 360, "showlegend": True,
                               "legend": dict(
-                                  font=dict(color=C["text_b"], size=11),
+                                  font=dict(color="#111827", size=11),
                                   orientation="v", x=1.02, y=0.5,
                               )})
         st.plotly_chart(fig, use_container_width=True)
@@ -101,7 +101,7 @@ def render():
     fig3.update_layout(**{**LAYOUT, "height": 420,
                            "legend": dict(
                                orientation="h", yanchor="bottom", y=1.02,
-                               font=dict(color=C["text_b"], size=12),
+                               font=dict(color="#111827", size=12),
                            )})
     st.plotly_chart(fig3, use_container_width=True)
 
@@ -142,7 +142,7 @@ def render():
                 marker_color=[RISK_COLORS.get(r, "#94A3B8") for r in risk_counts["Risk Level"]],
                 text=risk_counts["Customers"].apply(lambda v: f"{v:,}"),
                 textposition="outside",
-                textfont=dict(color=C["text_b"], size=12),
+                textfont=dict(color="#111827", size=12),
             ))
             fig4.update_layout(**{**LAYOUT, "height": 320, "showlegend": False,
                                    "yaxis_title": "Customers",

@@ -12,11 +12,11 @@ C = {
     "amber":       "#D97706",   # warning / reorder trigger
     "red":         "#DC2626",   # danger / stockout / high risk
 
-    # Neutrals — high contrast on white/light bg
-    "text_h":      "#0F172A",   # headings: near-black
-    "text_b":      "#1E293B",   # body text: very dark slate
-    "text_sub":    "#334155",   # sub-labels: dark slate (WCAG AAA)
-    "text_hint":   "#475569",   # hints / captions: medium-dark
+    # Neutrals — maximum contrast on white/light bg
+    "text_h":      "#111827",   # headings: almost black
+    "text_b":      "#111827",   # body text: almost black
+    "text_sub":    "#1F2937",   # sub-labels: very dark gray
+    "text_hint":   "#374151",   # hints / captions: dark gray
 
     # Backgrounds
     "bg_page":     "#EEF2F7",   # page background
@@ -30,39 +30,39 @@ LAYOUT = dict(
     template="plotly_white",
     font=dict(
         family="Inter, Helvetica Neue, Arial, sans-serif",
-        size=12,
-        color=C["text_b"],
+        size=13,
+        color="#111827",
     ),
-    title_font=dict(size=14, color=C["text_h"], family="Inter, sans-serif"),
+    title_font=dict(size=15, color="#111827", family="Inter, sans-serif"),
     margin=dict(l=12, r=12, t=44, b=12),
-    paper_bgcolor=C["bg_card"],
-    plot_bgcolor=C["bg_card"],
+    paper_bgcolor="#FFFFFF",
+    plot_bgcolor="#FFFFFF",
     hoverlabel=dict(
-        bgcolor=C["bg_card"],
-        font_color=C["text_b"],
+        bgcolor="#FFFFFF",
+        font_color="#111827",
         font_size=12,
-        bordercolor=C["border"],
+        bordercolor="#CBD5E1",
     ),
     xaxis=dict(
         showgrid=True,
         gridcolor="#E2E8F0",
         gridwidth=1,
-        linecolor=C["border"],
-        tickfont=dict(color=C["text_sub"], size=11),
-        title_font=dict(color=C["text_b"], size=12, family="Inter"),
+        linecolor="#CBD5E1",
+        tickfont=dict(color="#111827", size=11),
+        title_font=dict(color="#111827", size=13, family="Inter"),
     ),
     yaxis=dict(
         showgrid=True,
         gridcolor="#E2E8F0",
         gridwidth=1,
-        linecolor=C["border"],
-        tickfont=dict(color=C["text_sub"], size=11),
-        title_font=dict(color=C["text_b"], size=12, family="Inter"),
+        linecolor="#CBD5E1",
+        tickfont=dict(color="#111827", size=11),
+        title_font=dict(color="#111827", size=13, family="Inter"),
     ),
     legend=dict(
-        font=dict(color=C["text_b"], size=11),
-        bgcolor="rgba(255,255,255,0.9)",
-        bordercolor=C["border"],
+        font=dict(color="#111827", size=12),
+        bgcolor="rgba(255,255,255,0.95)",
+        bordercolor="#CBD5E1",
         borderwidth=1,
     ),
 )
@@ -71,11 +71,11 @@ LAYOUT = dict(
 def kpi_card(col, label, value, sub="", value_color=None):
     """Render a KPI card in the given Streamlit column."""
     import streamlit as st
-    v_color = value_color or C["text_h"]
+    v_color = value_color or "#111827"
     col.markdown(f"""
     <div style="
-      background:{C['bg_card']};
-      border:1px solid {C['border']};
+      background:#FFFFFF;
+      border:1px solid #CBD5E1;
       border-radius:10px;
       padding:20px 14px;
       text-align:center;
@@ -84,7 +84,7 @@ def kpi_card(col, label, value, sub="", value_color=None):
       <div style="
         font-size:0.7rem;
         font-weight:700;
-        color:{C['text_sub']};
+        color:#374151;
         text-transform:uppercase;
         letter-spacing:0.07em;
         margin-bottom:8px;
@@ -98,7 +98,7 @@ def kpi_card(col, label, value, sub="", value_color=None):
       ">{value}</div>
       <div style="
         font-size:0.78rem;
-        color:{C['text_hint']};
+        color:#4B5563;
         font-weight:500;
       ">{sub}</div>
     </div>""", unsafe_allow_html=True)
@@ -109,7 +109,7 @@ def page_header(module_num, title, subtitle):
     import streamlit as st
     st.markdown(f"""
     <div style="
-      background:linear-gradient(135deg, {C['navy']} 0%, #1A3D6B 100%);
+      background:linear-gradient(135deg, #0F2B4C 0%, #1A3D6B 100%);
       border-radius:12px;
       padding:26px 32px;
       margin-bottom:28px;
@@ -131,7 +131,7 @@ def page_header(module_num, title, subtitle):
         margin-bottom:4px;
       ">{title}</div>
       <div style="
-        color:#94A3B8;
+        color:#CBD5E1;
         font-size:0.88rem;
         font-weight:400;
       ">{subtitle}</div>
@@ -145,7 +145,7 @@ def section_title(text):
     <div style="
       font-size:0.95rem;
       font-weight:700;
-      color:{C['text_h']};
+      color:#111827;
       margin:8px 0 12px 0;
       padding-bottom:6px;
       border-bottom:2px solid #E2E8F0;

@@ -59,7 +59,7 @@ def render():
                           "legend": dict(
                               orientation="h", yanchor="bottom", y=1.02,
                               xanchor="right", x=1,
-                              font=dict(color=C["text_b"], size=12),
+                              font=dict(color="#111827", size=12),
                           )})
     st.plotly_chart(fig, use_container_width=True)
 
@@ -92,7 +92,7 @@ def render():
                                "xaxis_title": "Date", "yaxis_title": "Revenue (£)",
                                "legend": dict(
                                    orientation="h", yanchor="bottom", y=1.02,
-                                   font=dict(color=C["text_b"], size=12),
+                                   font=dict(color="#111827", size=12),
                                )})
         st.plotly_chart(fig2, use_container_width=True)
 
@@ -106,20 +106,20 @@ def render():
             marker_color=bar_cols,
             text=cmp["MAPE (%)"].apply(lambda v: f"{v:.2f}%"),
             textposition="outside",
-            textfont=dict(color=C["text_b"], size=11),
+            textfont=dict(color="#111827", size=11),
         ))
         fig3.update_layout(**{**LAYOUT, "height": 360,
                                "xaxis_title": "MAPE (%)", "showlegend": False,
                                "yaxis": dict(
                                    categoryorder="total ascending",
-                                   tickfont=dict(color=C["text_b"], size=11),
+                                   tickfont=dict(color="#111827", size=11),
                                )})
         st.plotly_chart(fig3, use_container_width=True)
 
     # ── What-If Scenario Analysis ─────────────────────────────────────────────
     st.markdown("---")
     section_title("What-If Scenario Analysis")
-    text_color = C["text_sub"]
+    text_color = "#1F2937"
     st.markdown(
         f"<p style='color:{text_color};font-size:14px;margin-bottom:16px;'>"
         "Adjust parameters to simulate different business scenarios on the 30-day forecast.</p>",
@@ -163,7 +163,7 @@ def render():
                              "xaxis_title": "Date", "yaxis_title": "Revenue (£)",
                              "legend": dict(
                                  orientation="h", yanchor="bottom", y=1.02,
-                                 font=dict(color=C["text_b"], size=12),
+                                 font=dict(color="#111827", size=12),
                              )})
     st.plotly_chart(fig_wi, use_container_width=True)
 
